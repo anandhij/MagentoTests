@@ -14,6 +14,7 @@ public class CheckoutPageObject
     {
         _webDriver = webDriver;
     }
+    private WebDriverWait Wait => new (_webDriver, TimeSpan.FromSeconds(20));
     private IWebElement CartIcon => _webDriver.FindElement(By.XPath("/html/body/div[2]/header/div[2]/div[1]/a"));
     private IWebElement ProceedToCheckout => _webDriver.FindElement(By.Id("top-cart-btn-checkout"));
     private IWebElement OrderSummary => _webDriver.FindElement(By.ClassName("opc-block-summary"));
@@ -36,8 +37,10 @@ public class CheckoutPageObject
 
         int counter = 0;
         Assert.True(OrderSummary.Displayed);
-        Thread.Sleep(3000);
-        ExpandOrderSummary.Click();
+        Wait.Until(drv => drv.FindElement(By.CssSelector("#opc-sidebar > div.opc-block-summary > div > div.title > strong > span:nth-child(2)")).Displayed);
+        WebElement webElement1 = (WebElement)ExpandOrderSummary;
+        ((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].click();", webElement1);
+        
         foreach(WebElement we in productItems)
         {
             var productName=we.GetDomProperty("innerText");
@@ -65,18 +68,16 @@ public class CheckoutPageObject
     public void NavigateToPaymentReview()
     {
         NextButton.Click();
-        var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(20));
-        wait.Until(drv => drv.FindElement(By.Id("checkout-payment-method-load")));
+        Wait.Until(drv => drv.FindElement(By.Id("checkout-payment-method-load")));
     }
     
     public void PlaceOrder()
     {
-        var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(20));
-        wait.Until(drv => drv.FindElement(By.XPath("//span[text()='Place Order']")));
+        Wait.Until(drv => drv.FindElement(By.XPath("//span[text()='Place Order']")));
         WebElement webElement = (WebElement)_webDriver.FindElement(By.CssSelector("button[class='action primary checkout']"));
         ((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].click();", webElement);
 
-        wait.Until(drv => drv.FindElement(By.CssSelector("h1[class='page-title']")));
+        Wait.Until(drv => drv.FindElement(By.CssSelector("h1[class='page-title']")));
     }
     
     public String GetOrderNumber()

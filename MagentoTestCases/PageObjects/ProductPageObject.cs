@@ -1,4 +1,5 @@
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace MagentoTestCases.PageObjects;
 
@@ -13,7 +14,8 @@ public class ProductPageObject
     {
         _webDriver = webDriver;
     }
-
+    
+    private WebDriverWait Wait => new (_webDriver, TimeSpan.FromSeconds(20));
     private IWebElement MenLink => _webDriver.FindElement(By.LinkText("Men"));
     private IWebElement JacketsLink => _webDriver.FindElement(By.LinkText("Jackets"));
     private IWebElement PantsLink => _webDriver.FindElement(By.LinkText("Pants"));
@@ -33,7 +35,7 @@ public class ProductPageObject
             JacketSize.Click();
             Colour.Click();
             AddToCart.Click();
-            Thread.Sleep(3000);
+            Wait.Until(drv => drv.FindElement(By.CssSelector("div[class='messages']")).Displayed);
         }
     }
 
@@ -46,6 +48,6 @@ public class ProductPageObject
         PantSize.Click();
         Colour.Click();
         AddToCart.Click();
-        Thread.Sleep(3000);
+        Wait.Until(drv => drv.FindElement(By.CssSelector("div[class='messages']")).Displayed);
     }
 }
