@@ -2,9 +2,14 @@
 
 This automation project has been developed using C#, Selenium WebDriver and SpecFlow (BDD).
 
-The test case is detailed in the BizCover assessment document.
-
 The IDE of choice is JetBrains Rider.  
+The browser used for testing is Google Chrome.So it is also a prerequisite to run the tests.
+
+The test case is detailed in the BizCover assessment document. 
+
+_Precondition:_
+Prior to running the tests, please make sure the shopping cart is empty for the given user. Otherwise test will
+fail, because the requirement of the test case is to buy 2 men's jackets and 1 men's pant.
 
 _To run the automated test scenario:_
 1) Checkout the project from Github
